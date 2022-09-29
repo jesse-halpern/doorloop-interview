@@ -1,7 +1,11 @@
 import { Character, Word } from '../../types'
 import styles from './styles.module.scss'
-import { WordListProps } from './types'
 import classNames from 'classnames'
+import { PropsWithChildren } from 'react'
+
+export type WordListProps = PropsWithChildren<{
+  words: Word[]
+}>
 
 export default function WordList({ words }: WordListProps) {
   return (
@@ -32,9 +36,5 @@ function Letter({ correct, userSymbol, id, symbol }: Character) {
     [styles.correct]: correct,
     [styles.incorrect]: !correct && userSymbol,
   })
-  return (
-    <span key={id} className={className}>
-      {symbol}
-    </span>
-  )
+  return <span className={className}>{symbol}</span>
 }

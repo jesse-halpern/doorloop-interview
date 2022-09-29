@@ -19,6 +19,10 @@ const getInitialState = (
   remaining: duration,
 })
 
+/**
+ * Returns updated time information at a provided interval and duration
+ * Does not begin until start() is called
+ */
 export function useTimer({
   interval = ONE_SECOND_MS,
   duration = ONE_MINUTE_MS,
@@ -43,7 +47,6 @@ export function useTimer({
   return {
     elapsed,
     remaining,
-    reset: () => setStartTime(undefined),
     start: () => {
       if (!startTime) setStartTime(Date.now())
     },

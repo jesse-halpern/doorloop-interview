@@ -14,6 +14,10 @@ export type Score = {
   }
   wpm: number
 }
+/**
+ * Maintains a score object for the provided user input
+ * Conntains both global averages as well as character-level accuracy counts
+ */
 export default function useScore(
   answers: string[],
   input: string,
