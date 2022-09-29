@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Character, Word } from '../types'
+import { ONE_MINUTE_MS } from '../utils'
 
 export type Score = {
   words: Word[]
@@ -33,7 +34,6 @@ function calculateScore(answers: string[], input: string, elapsed: number) {
   const completedWords = input.split(' ')
   const wordModels = answers.map((word, wordIndex) => {
     const userWord = completedWords[wordIndex]
-    console.log(userWord)
     // From the bottom up, Score individual characters first, then build word statistics
     const charModels: Character[] = word.split('').map((char, i) => ({
       id: `${char}-${i}`,
@@ -69,7 +69,6 @@ function calculateScore(answers: string[], input: string, elapsed: number) {
       },
     }
   })
-  console.log(wordModels)
   const attemptedWords = wordModels.filter(({ userText }) => !!userText)
   const wordCounts = {
     correct: attemptedWords.reduce(
@@ -82,7 +81,6 @@ function calculateScore(answers: string[], input: string, elapsed: number) {
       0
     ),
   }
-  console.log(wordCounts)
   const characterCounts = wordModels.reduce(
     ({ correct, incorrect }, word, index) => ({
       correct: correct + word.counts.correct,
@@ -100,7 +98,7 @@ function calculateScore(answers: string[], input: string, elapsed: number) {
       words: wordCounts,
       characters: characterCounts,
     },
-    wpm: !totalCorrect ? 0 : (totalCorrect * 60000) / elapsed,
+    wpm: !totalCorrect ? 0 : (totalCorrect * ONE_MINUTE_MS) / elapsed,
     accuracy: {
       words: totalCorrect / (totalCorrect + wordCounts.incorrect),
       characters:

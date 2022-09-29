@@ -1,26 +1,23 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
-import useRandomOrder from '../../hooks/useRandomOrder'
 import useScore from '../../hooks/useScore'
 import { useTimer } from '../../hooks/useTimer'
 import Scorecard from '../ScoreCard'
 import WordList from '../WordList'
-import WORD_BANK from '../../data/word-bank.json'
 import styles from './styles.module.scss'
 import useFocusInput from '../../hooks/useFocus'
 
 type GameContainerProps = {
-  ordering: number[]
+  answers: string[]
   duration: number
   interval: number
 }
 export default function GameContainer({
-  ordering,
+  answers,
   duration,
   interval,
 }: GameContainerProps) {
   const [input, setInput] = useState('')
-  const { randomized: answers } = useRandomOrder(WORD_BANK, ordering)
   const {
     start,
     remaining,

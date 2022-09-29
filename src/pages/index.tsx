@@ -1,5 +1,5 @@
 import WORD_BANK from '../data/word-bank.json'
-import { ONE_MINUTE_MS, ONE_SECOND_MS } from '../utils'
+import { ONE_MINUTE_MS, ONE_SECOND_MS, shuffle } from '../utils'
 import GameContainer from '../components/GameContainer'
 
 export async function getServerSideProps() {
@@ -7,7 +7,7 @@ export async function getServerSideProps() {
     props: {
       duration: ONE_MINUTE_MS,
       interval: ONE_SECOND_MS,
-      ordering: WORD_BANK.map(Math.random),
+      answers: shuffle(WORD_BANK),
     },
   }
 }
