@@ -14,15 +14,8 @@ export default function WordList({ words }: WordListProps) {
 }
 
 function Word({ userText, text, characters, id }: Word) {
-  const hasValue = !!userText
   const className = classNames({
-    word: true,
-    hasValue,
     [styles.correct]: text === userText,
-    incorrect:
-      hasValue && userText !== text && text.indexOf(userText) !== 0
-        ? true
-        : false,
   })
 
   return (
@@ -36,7 +29,6 @@ function Word({ userText, text, characters, id }: Word) {
 
 function Letter({ correct, userSymbol, id, symbol }: Character) {
   const className = classNames({
-    letter: true,
     [styles.correct]: correct,
     [styles.incorrect]: !correct && userSymbol,
   })
