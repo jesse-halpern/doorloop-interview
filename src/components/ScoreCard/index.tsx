@@ -23,7 +23,7 @@ export default function Scorecard({
         <tr>
           <td>{formatTime(remaining ?? duration)}</td>
           <td>{wpm ? wpm.toFixed(2) : '-'}</td>
-          <td>{accuracy.characters.toFixed(2)}</td>
+          <td>{accuracy.characters ? accuracy.characters.toFixed(2) : '-'}</td>
           <td>{counts.words.correct}</td>
         </tr>
       </tbody>
