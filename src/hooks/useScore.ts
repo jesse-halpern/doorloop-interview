@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Character, Word } from '../types'
-import { ONE_MINUTE_MS } from '../utils'
+import { count, ONE_MINUTE_MS } from '../utils'
 
 export type Score = {
   words: Word[]
@@ -45,46 +45,23 @@ function calculateScore(answers: string[], input: string, elapsed: number) {
       userSymbol: userWord?.[i],
       correct: char === userWord?.[i],
     }))
-
+    const attemptedChars = charModels.filter(({ userSymbol }) => !!userSymbol)
     return {
       id: `${word}-${wordIndex}`,
       text: word,
       userText: userWord,
       characters: charModels,
-      counts: {
-        correct: charModels.reduce(
-          (total, char, i) =>
-            !!char.userSymbol && char.userSymbol === char.symbol
-              ? ++total
-              : total,
-          0
-        ),
-        incorrect: charModels.reduce(
-          (total, char, i) =>
-            !!char.userSymbol && char.userSymbol !== char.symbol
-              ? ++total
-              : total,
-          0
-        ),
-        unfinished: charModels.reduce(
-          (total, char, i) => (!char.userSymbol ? ++total : total),
-          0
-        ),
-      },
+      counts: count(attemptedChars, {
+        correct: ({ userSymbol, symbol }) => userSymbol === symbol,
+        incorrect: ({ userSymbol, symbol }) => userSymbol !== symbol,
+      }),
     }
   })
   const attemptedWords = wordModels.filter(({ userText }) => !!userText)
-  const wordCounts = {
-    correct: attemptedWords.reduce(
-      (count, { userText, text }) => (text === userText ? ++count : count),
-      0
-    ),
-    incorrect: attemptedWords.reduce(
-      (count, { userText, text }) =>
-        !text.startsWith(userText) ? ++count : count,
-      0
-    ),
-  }
+  const wordCounts = count(attemptedWords, {
+    correct: ({ text, userText }) => text === userText,
+    incorrect: ({ text, userText }) => !text.startsWith(userText),
+  })
   const characterCounts = wordModels.reduce(
     ({ correct, incorrect }, word, index) => ({
       correct: correct + word.counts.correct,
